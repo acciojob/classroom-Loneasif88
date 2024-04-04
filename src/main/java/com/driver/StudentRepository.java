@@ -1,6 +1,5 @@
 package com.driver;
 
-//import com.driver.*;
 import java.util.*;
 
 import org.springframework.stereotype.Repository;
@@ -18,48 +17,41 @@ public class StudentRepository {
         this.teacherStudentMapping = new HashMap<String, List<String>>();
     }
 
+
     public void saveStudent(Student student){
-        // your code goes here
         studentMap.put(student.getName(),student);
     }
 
     public void saveTeacher(Teacher teacher){
-        // your code goes here
         teacherMap.put(teacher.getName(), teacher);
     }
 
     public void saveStudentTeacherPair(String student, String teacher){
-        if(studentMap.containsKey(student) && teacherMap.containsKey(teacher)){
-            // your code goes
-            List<String> studentList= new ArrayList<>();
-            if(teacherStudentMapping.containsKey(teacher)){
-                studentList=teacherStudentMapping.get(teacher);
+        if(studentMap.containsKey(student) && teacherMap.containsKey(teacher)) {
+            if (teacherStudentMapping.containsKey(teacher)) {
+                List<String> temp = teacherStudentMapping.get(teacher);
+                temp.add(student);
+                teacherStudentMapping.put(teacher, temp);
+            } else {
+                List<String> temp = new ArrayList<>();
+                temp.add(student);
+                teacherStudentMapping.put(teacher, temp);
             }
-            studentList.add(student);
-            teacherStudentMapping.put(teacher,studentList);
+            Teacher teacherObject = teacherMap.get(teacher);
+            teacherObject.setNumberOfStudents(teacherObject.getNumberOfStudents() + 1);
         }
     }
 
     public Student findStudent(String student){
-        // your code goes here
-        if(studentMap.containsKey(student)){
-            return studentMap.get(student);
-        }
-        return null;
+        return studentMap.get(student);
     }
 
     public Teacher findTeacher(String teacher){
-        // your code goes here
-        if(teacherMap.containsKey(teacher)){
-            return teacherMap.get(teacher);
-        }
-        return null;
+        return teacherMap.get(teacher);
     }
 
     public List<String> findStudentsFromTeacher(String teacher){
-        // your code goes here
-        // find student list corresponding to a teacher
-        List<String> studentList=new ArrayList<>();
+    	List<String> studentList=new ArrayList<>();
         if(teacherStudentMapping.containsKey(teacher)){
             studentList= teacherStudentMapping.get(teacher);
         }
@@ -67,37 +59,23 @@ public class StudentRepository {
     }
 
     public List<String> findAllStudents(){
-        // your code goes here
-        List<String> allStudentList = new ArrayList<>(studentMap.keySet());
-        return allStudentList;
+        return new ArrayList<>(studentMap.keySet());
     }
 
     public void deleteTeacher(String teacher){
-        // your code goes here
-        if(teacherStudentMapping.containsKey(teacher)) {
-            List<String> studentList = new ArrayList<>(teacherStudentMapping.get(teacher));
-            for(String s:studentList){
-                studentMap.remove(s);
-            }
-            teacherStudentMapping.remove(teacher);
+        for(String tName : teacherStudentMapping.get(teacher)){
+            studentMap.remove(tName);
+        }
 
-        }
-        if(teacherMap.containsKey(teacher)){
-            teacherMap.remove(teacher);
-        }
+        teacherMap.remove(teacher);
+        teacherStudentMapping.remove(teacher);
     }
 
     public void deleteAllTeachers(){
-        // your code goes here
-        for(String teacher: teacherMap.keySet()){
-            if(teacherStudentMapping.containsKey(teacher)){
-                List<String> studentList= teacherStudentMapping.get(teacher);
-                for(String studentName : studentList){
-                    studentMap.remove(studentName);
-                }
-            }
-            teacherStudentMapping.remove(teacher);
+        for(String teacher : teacherMap.keySet()){
+            deleteTeacher((teacher));
+            teacherMap.remove(teacher);
         }
-        teacherMap= new HashMap<>();
+        teacherStudentMapping.clear();
     }
 }

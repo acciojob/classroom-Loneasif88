@@ -1,4 +1,4 @@
- package com.driver;
+package com.driver;
 
 public class Teacher {
 
@@ -8,38 +8,32 @@ public class Teacher {
 
     private int age;
 
-    public Teacher() {
-
+    public Teacher(String name, int numberOfStudents, int age){
+        this.name = name;
+        this.numberOfStudents = numberOfStudents;
+        this.age = age;
     }
-	public String getName() {
-		return name;
-	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public int getNumberOfStudents() {
-		return numberOfStudents;
-	}
+    public int getNumberOfStudents() {
+        return numberOfStudents;
+    }
 
-	public void setNumberOfStudents(int numberOfStudents) {
-		this.numberOfStudents = numberOfStudents;
-	}
+    public int getAge() {
+        return age;
+    }
 
-	public int getAge() {
-		return age;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setNumberOfStudents(int numberOfStudents) {
+        this.numberOfStudents = numberOfStudents;
+    }
 
-	public void setAge(int age) {
-		this.age = age;
-	}
-
-	public Teacher(int numberOfStudents, int age, String name) {
-		super();
-		this.numberOfStudents = numberOfStudents;
-		this.age = age;
-		this.name = name;
-	}
-    
+    public void setAge(int age) {
+        this.age = age;
+    }
 }
